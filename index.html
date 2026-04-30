@@ -35,23 +35,26 @@
   Review My Contract
 </button>
 
+<p id="statusMessage"></p>
+
 <script>
   function checkFile() {
     const fileInput = document.getElementById('contractFile');
+    const status = document.getElementById('statusMessage');
 
     if (!fileInput.files.length) {
-      alert('Please choose a PDF or Word document first.');
+      status.innerText = 'Please choose a PDF or Word document first.';
       return;
     }
 
     const file = fileInput.files[0];
 
-    // Show processing message
-    alert('Uploading ' + file.name + '...');
+    // Show uploading message
+    status.innerText = 'Uploading ' + file.name + '...';
 
-    // Simulate AI processing delay
+    // Simulate processing
     setTimeout(() => {
-      alert('Analysis complete. Your contract review will be available soon.');
+      status.innerText = 'Analysis complete. Your contract review is ready.';
     }, 2000);
   }
 </script>
