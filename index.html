@@ -45,7 +45,14 @@
     }
 
     const file = fileInput.files[0];
-    alert('File received: ' + file.name + '. Processing coming next.');
+
+    // Show processing message
+    alert('Uploading ' + file.name + '...');
+
+    // Simulate AI processing delay
+    setTimeout(() => {
+      alert('Analysis complete. Your contract review will be available soon.');
+    }, 2000);
   }
 </script>
 </div>
