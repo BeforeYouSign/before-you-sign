@@ -122,29 +122,37 @@ button:hover {
         status.innerText = 'Analysis complete.';
         loadingBarContainer.style.display = 'none';
 
-        results.innerHTML = `
+results.innerHTML = `
   <div style="background:#fff; padding:20px; border-radius:10px; box-shadow:0 5px 15px rgba(0,0,0,0.1);">
     
     <h3 style="margin-top:0;">Contract Review Summary</h3>
 
+    <p style="font-size:14px; color:#555;">Based on your uploaded contract, here are key areas to review:</p>
+
+    <hr style="margin:15px 0;">
+
     <div style="margin-bottom:15px;">
       <strong>⚠️ Key Risk</strong>
       <p style="margin:5px 0;">Variation pricing terms are unclear and may allow unexpected cost increases.</p>
+      <p style="font-size:13px; color:#666;"><em>Question to ask: How are variations priced and approved?</em></p>
     </div>
 
     <div style="margin-bottom:15px;">
       <strong>💰 Cost Concern</strong>
       <p style="margin:5px 0;">Provisional sums may significantly increase your final contract price.</p>
+      <p style="font-size:13px; color:#666;"><em>Question to ask: Can these allowances be fixed before signing?</em></p>
     </div>
 
     <div style="margin-bottom:15px;">
       <strong>⏱ Time Risk</strong>
       <p style="margin:5px 0;">No enforceable penalties for builder delays identified.</p>
+      <p style="font-size:13px; color:#666;"><em>Question to ask: What happens if the project runs over time?</em></p>
     </div>
 
     <div style="margin-bottom:15px;">
       <strong>📄 Important Note</strong>
       <p style="margin:5px 0;">Builder retains broad discretion over material substitutions.</p>
+      <p style="font-size:13px; color:#666;"><em>Question to ask: Can substitutions be restricted or approved by you?</em></p>
     </div>
 
   </div>
