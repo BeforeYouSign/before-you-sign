@@ -29,10 +29,25 @@
   <h1>Before You Sign</h1>
   <p>Upload your building contract and get a clear breakdown before signing.</p>
 
-  <input type="file"><br><br>
-  <button onclick="alert('Upload received. AI review coming next step.')">
+ <input type="file" id="contractFile" accept=".pdf,.doc,.docx"><br><br>
+
+<button onclick="checkFile()">
   Review My Contract
 </button>
+
+<script>
+  function checkFile() {
+    const fileInput = document.getElementById('contractFile');
+
+    if (!fileInput.files.length) {
+      alert('Please choose a PDF or Word document first.');
+      return;
+    }
+
+    const file = fileInput.files[0];
+    alert('File received: ' + file.name + '. Processing coming next.');
+  }
+</script>
 </div>
 
 </body>
