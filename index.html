@@ -83,14 +83,32 @@
         loadingBarContainer.style.display = 'none';
 
         results.innerHTML = `
-          <h3>Contract Summary</h3>
-          <ul>
-            <li><strong>⚠️ Risk:</strong> Unclear variation pricing terms</li>
-            <li><strong>💰 Cost:</strong> Provisional sums may increase final price</li>
-            <li><strong>⏱ Time:</strong> No strict deadline penalties for delays</li>
-            <li><strong>📄 Note:</strong> Builder has broad discretion on material changes</li>
-          </ul>
-        `;
+  <div style="background:#fff; padding:20px; border-radius:10px; box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+    
+    <h3 style="margin-top:0;">Contract Review Summary</h3>
+
+    <div style="margin-bottom:15px;">
+      <strong>⚠️ Key Risk</strong>
+      <p style="margin:5px 0;">Variation pricing terms are unclear and may allow unexpected cost increases.</p>
+    </div>
+
+    <div style="margin-bottom:15px;">
+      <strong>💰 Cost Concern</strong>
+      <p style="margin:5px 0;">Provisional sums may significantly increase your final contract price.</p>
+    </div>
+
+    <div style="margin-bottom:15px;">
+      <strong>⏱ Time Risk</strong>
+      <p style="margin:5px 0;">No enforceable penalties for builder delays identified.</p>
+    </div>
+
+    <div style="margin-bottom:15px;">
+      <strong>📄 Important Note</strong>
+      <p style="margin:5px 0;">Builder retains broad discretion over material substitutions.</p>
+    </div>
+
+  </div>
+`;
       }
     }, 500);
   }
