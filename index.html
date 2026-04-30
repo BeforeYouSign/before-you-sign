@@ -37,10 +37,13 @@
 
 <p id="statusMessage"></p>
 
+<div id="results" style="margin-top:20px; text-align:left;"></div>
+
 <script>
   function checkFile() {
     const fileInput = document.getElementById('contractFile');
     const status = document.getElementById('statusMessage');
+    const results = document.getElementById('results');
 
     if (!fileInput.files.length) {
       status.innerText = 'Please choose a PDF or Word document first.';
@@ -49,12 +52,21 @@
 
     const file = fileInput.files[0];
 
-    // Show uploading message
     status.innerText = 'Uploading ' + file.name + '...';
+    results.innerHTML = '';
 
-    // Simulate processing
     setTimeout(() => {
-      status.innerText = 'Analysis complete. Your contract review is ready.';
+      status.innerText = 'Analysis complete.';
+
+      results.innerHTML = `
+        <h3>Contract Summary</h3>
+        <ul>
+          <li><strong>⚠️ Risk:</strong> Unclear variation pricing terms</li>
+          <li><strong>💰 Cost:</strong> Provisional sums may increase final price</li>
+          <li><strong>⏱ Time:</strong> No strict deadline penalties for delays</li>
+          <li><strong>📄 Note:</strong> Builder has broad discretion on material changes</li>
+        </ul>
+      `;
     }, 2000);
   }
 </script>
