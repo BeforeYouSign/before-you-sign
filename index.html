@@ -35,6 +35,22 @@ button {
 button:hover {
   background: #2c3a66;
 }
+
+.fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}    
+    
   </style>
 </head>
 <body>
@@ -161,7 +177,7 @@ button:hover {
         loadingBarContainer.style.display = 'none';
 
 results.innerHTML = `
-  <div style="background:#fff; padding:20px; border-radius:10px; box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+  <div class="fade-in" style="background:#fff; padding:20px; border-radius:10px; box-shadow:0 5px 15px rgba(0,0,0,0.1);">
     
     <h3 style="margin-top:0;">Contract Review Summary</h3>
 
