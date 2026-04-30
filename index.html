@@ -67,6 +67,13 @@ button:hover {
   <p style="font-size:13px; color:#666; margin-top:10px;">
     Takes less than 30 seconds. No sign-up required.
   </p>
+
+  <p id="statusMessage"></p>
+
+<div id="loadingBarContainer" style="display:none; width:100%; background:#ddd; border-radius:10px; margin:20px 0;">
+  <div id="loadingBar" style="width:0%; height:14px; background:#111; border-radius:10px;"></div>
+</div>
+  
   <hr style="margin:30px 0; border:none; border-top:1px solid #e0e6ed;">
 </div>  
 
@@ -111,12 +118,6 @@ button:hover {
     This optional service would be separate from the automated report and provided by a qualified professional.
   </p>
 </div>  
-  
-<p id="statusMessage"></p>
-
-<div id="loadingBarContainer" style="display:none; width:100%; background:#ddd; border-radius:10px; margin:20px 0;">
-  <div id="loadingBar" style="width:0%; height:14px; background:#111; border-radius:10px;"></div>
-</div>
 
 <div id="results" style="margin-top:20px; text-align:left;"></div>
 
