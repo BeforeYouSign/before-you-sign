@@ -37,6 +37,10 @@
 
 <p id="statusMessage"></p>
 
+<div id="loadingBarContainer" style="display:none; width:100%; background:#ddd; border-radius:10px; margin:20px 0;">
+  <div id="loadingBar" style="width:0%; height:14px; background:#111; border-radius:10px;"></div>
+</div>
+
 <div id="results" style="margin-top:20px; text-align:left;"></div>
 
 <script>
@@ -44,6 +48,8 @@
     const fileInput = document.getElementById('contractFile');
     const status = document.getElementById('statusMessage');
     const results = document.getElementById('results');
+    const loadingBarContainer = document.getElementById('loadingBarContainer');
+    const loadingBar = document.getElementById('loadingBar');
 
     if (!fileInput.files.length) {
       status.innerText = 'Please choose a PDF or Word document first.';
@@ -52,22 +58,41 @@
 
     const file = fileInput.files[0];
 
-    status.innerText = 'Uploading ' + file.name + '...';
+    status.innerText = 'Reading ' + file.name + '...';
     results.innerHTML = '';
+    loadingBarContainer.style.display = 'block';
+    loadingBar.style.width = '0%';
 
-    setTimeout(() => {
-      status.innerText = 'Analysis complete.';
+    let progress = 0;
 
-      results.innerHTML = `
-        <h3>Contract Summary</h3>
-        <ul>
-          <li><strong>⚠️ Risk:</strong> Unclear variation pricing terms</li>
-          <li><strong>💰 Cost:</strong> Provisional sums may increase final price</li>
-          <li><strong>⏱ Time:</strong> No strict deadline penalties for delays</li>
-          <li><strong>📄 Note:</strong> Builder has broad discretion on material changes</li>
-        </ul>
-      `;
-    }, 2000);
+    const loading = setInterval(() => {
+      progress += 10;
+      loadingBar.style.width = progress + '%';
+
+      if (progress === 30) {
+        status.innerText = 'Identifying key contract sections...';
+      }
+
+      if (progress === 60) {
+        status.innerText = 'Preparing plain-English questions...';
+      }
+
+      if (progress >= 100) {
+        clearInterval(loading);
+        status.innerText = 'Analysis complete.';
+        loadingBarContainer.style.display = 'none';
+
+        results.innerHTML = `
+          <h3>Contract Summary</h3>
+          <ul>
+            <li><strong>⚠️ Risk:</strong> Unclear variation pricing terms</li>
+            <li><strong>💰 Cost:</strong> Provisional sums may increase final price</li>
+            <li><strong>⏱ Time:</strong> No strict deadline penalties for delays</li>
+            <li><strong>📄 Note:</strong> Builder has broad discretion on material changes</li>
+          </ul>
+        `;
+      }
+    }, 500);
   }
 </script>
 </div>
