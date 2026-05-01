@@ -173,6 +173,13 @@ button:hover {
       return;
     }
 
+    const acknowledge = document.getElementById('acknowledge');
+
+    if (!acknowledge.checked) {
+    status.innerText = 'Please confirm you understand before continuing.';
+    return;
+    }
+
     const file = fileInput.files[0];
 
     status.innerText = 'Reading ' + file.name + '...';
