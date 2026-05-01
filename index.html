@@ -225,11 +225,14 @@ button:hover {
       }
 
       if (progress >= 100) {
-        clearInterval(loading);
-        status.innerText = 'Analysis complete.';
-        loadingBarContainer.style.display = 'none';
+  clearInterval(loading);
+  status.innerText = 'Finalising analysis...';
 
-results.innerHTML = `
+  setTimeout(() => {
+    status.innerText = 'Analysis complete.';
+    loadingBarContainer.style.display = 'none';
+
+    results.innerHTML = `
   <div class="fade-in" style="background:#fff; padding:25px; border-radius:12px; box-shadow:0 5px 15px rgba(0,0,0,0.1);">
     
     <h3 style="margin-top:0;">Contract Review Summary</h3>
