@@ -106,10 +106,23 @@ button:hover {
   
  <input type="file" id="contractFile" accept=".pdf,.doc,.docx"><br><br>
 
-<div style="margin-top:10px; font-size:13px; color:#555; text-align:center;">
-  <input type="checkbox" id="acknowledge">
-  I understand this tool provides general information only and I should seek professional advice before making decisions.
-</div>  
+<div style="
+  margin-top:20px;
+  padding:12px;
+  background:#f7f9fc;
+  border-radius:8px;
+  font-size:13px;
+  color:#333;
+  text-align:left;
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+">
+  <input type="checkbox" id="acknowledge" style="margin-top:3px;">
+  <span>
+    I understand this tool provides general information only and I should seek professional advice before making decisions.
+  </span>
+</div>
 
 <div style="margin-top:20px; margin-bottom:20px;">
   <button onclick="checkFile()">
