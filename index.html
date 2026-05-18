@@ -224,75 +224,76 @@ button:hover {
         status.innerText = 'Preparing plain-English questions...';
       }
 
-if (progress >= 100) {
-  clearInterval(loading);
-  status.innerText = 'Finalising analysis...';
+ if (progress >= 100) {
+          clearInterval(loading);
 
-  setTimeout(() => {
-    status.innerText = 'Analysis complete.';
-    loadingBarContainer.style.display = 'none';
+          status.innerText = 'Finalising analysis...';
 
-    results.innerHTML = `
-  <div class="fade-in" style="background:#fff; padding:25px; border-radius:12px; box-shadow:0 5px 15px rgba(0,0,0,0.1);">
-    
-    <h3 style="margin-top:0;">Contract Review Summary</h3>
+          setTimeout(() => {
+            status.innerText = 'Analysis complete.';
+            loadingBarContainer.style.display = 'none';
 
-    <p style="font-size:14px; color:#555; margin-bottom:20px;">
-      Based on your uploaded contract, here are key areas that may require further review:
-    </p>
+            results.innerHTML = `
+              <div class="fade-in" style="background:#fff; padding:25px; border-radius:12px; box-shadow:0 5px 15px rgba(0,0,0,0.1); text-align:left;">
 
-    <div style="margin-bottom:20px;">
-      <strong style="color:#b00020;">⚠️ Key Risk</strong>
-      <p style="margin:5px 0;">Variation pricing terms are unclear and may allow unexpected cost increases.</p>
-      <p style="font-size:13px; color:#666;"><em>Suggested question: How are variations priced and approved?</em></p>
-    </div>
+                <h3 style="margin-top:0;">Contract Review Summary</h3>
 
-    <div style="margin-bottom:20px;">
-      <strong style="color:#8a6d1d;">💰 Cost Concern</strong>
-      <p style="margin:5px 0;">Provisional sums may significantly increase your final contract price.</p>
-      <p style="font-size:13px; color:#666;"><em>Suggested question: Can these allowances be fixed before signing?</em></p>
-    </div>
+                <p style="font-size:14px; color:#555; margin-bottom:20px;">
+                  Based on your uploaded contract, here are key areas that may require further review:
+                </p>
 
-    <div style="margin-bottom:20px;">
-      <strong style="color:#2c3a66;">⏱ Time Risk</strong>
-      <p style="margin:5px 0;">No enforceable penalties for builder delays identified.</p>
-      <p style="font-size:13px; color:#666;"><em>Suggested question: What happens if the project runs over time?</em></p>
-    </div>
+                <div style="margin-bottom:20px;">
+                  <strong style="color:#b00020;">⚠️ Key Risk</strong>
+                  <p style="margin:5px 0;">Variation pricing terms are unclear and may allow unexpected cost increases.</p>
+                  <p style="font-size:13px; color:#666;"><em>Suggested question: How are variations priced and approved?</em></p>
+                </div>
 
-    <div style="margin-bottom:20px;">
-      <strong>📄 Important Note</strong>
-      <p style="margin:5px 0;">Builder retains broad discretion over material substitutions.</p>
-      <p style="font-size:13px; color:#666;"><em>Suggested question: Can substitutions be restricted or approved by you?</em></p>
-    </div>
+                <div style="margin-bottom:20px;">
+                  <strong style="color:#8a6d1d;">💰 Cost Concern</strong>
+                  <p style="margin:5px 0;">Provisional sums may significantly increase your final contract price.</p>
+                  <p style="font-size:13px; color:#666;"><em>Suggested question: Can these allowances be fixed before signing?</em></p>
+                </div>
 
-    <div style="
-      margin-top:25px;
-      padding:15px;
-      background:#f7f9fc;
-      border-radius:10px;
-      text-align:left;
-    ">
-      <strong>Next step</strong>
-      <p style="margin:5px 0; font-size:14px;">
-        Use these insights to ask your builder or advisor the right questions before signing your contract.
-      </p>
-    </div>
+                <div style="margin-bottom:20px;">
+                  <strong style="color:#2c3a66;">⏱ Time Risk</strong>
+                  <p style="margin:5px 0;">No enforceable penalties for builder delays identified.</p>
+                  <p style="font-size:13px; color:#666;"><em>Suggested question: What happens if the project runs over time?</em></p>
+                </div>
 
-    <div style="
-      margin-top:15px;
-      font-size:13px;
-      color:#666;
-      text-align:left;
-    ">
-      For a more detailed review, including clause-by-clause analysis and tailored recommendations, a professional report may be available.
-    </div>
+                <div style="margin-bottom:20px;">
+                  <strong>📄 Important Note</strong>
+                  <p style="margin:5px 0;">Builder retains broad discretion over material substitutions.</p>
+                  <p style="font-size:13px; color:#666;"><em>Suggested question: Can substitutions be restricted or approved by you?</em></p>
+                </div>
 
-  </div>
-`;
-  }, 800);
-}
-</script>
-</div>
+                <div style="
+                  margin-top:25px;
+                  padding:15px;
+                  background:#f7f9fc;
+                  border-radius:10px;
+                ">
+                  <strong>Next step</strong>
+                  <p style="margin:5px 0; font-size:14px;">
+                    Use these insights to ask your builder or advisor the right questions before signing your contract.
+                  </p>
+                </div>
+
+                <div style="
+                  margin-top:15px;
+                  font-size:13px;
+                  color:#666;
+                ">
+                  For a more detailed review, including clause-by-clause analysis and tailored recommendations, a professional report may be available.
+                </div>
+
+              </div>
+            `;
+          }, 800);
+        }
+
+      }, 500);
+    }
+  </script>
 
 </body>
 </html>
