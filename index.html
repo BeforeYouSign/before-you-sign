@@ -225,7 +225,67 @@ button:hover {
 
     const file = fileInput.files[0];
 
+    console.log(file);
+
+    const reader = new FileReader();
+
+    reader.onload = async function() {
+    console.log("PDF loaded into memory");
+
+    const typedArray = new Uint8Array(reader.result);
+    const pdf = await pdfjsLib.getDocument(typedArray).promise;
+
+    console.log("Number of pages:", pdf.numPages);
+    let fullText = "";
+
+    for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
+      const page = await pdf.getPage(pageNumber);
+
+      const textContent = await page.getTextContent();
+
+      const pageText = textContent.items.map(item => item.str).join(" ");
+
+      fullText += pageText + "\n\n";
+    }
+
+    console.log(fullText);
+    console.log("Character count:", fullText.length);
+    const topics = {
+    variations: (fullText.match(/variation/gi) || []).length,
+    payment: (fullText.match(/payment/gi) || []).length,
+    warranty: (fullText.match(/warranty/gi) || []).length,
+    defects: (fullText.match(/defect/gi) || []).length,
+    delay: (fullText.match(/delay/gi) || []).length,
+    termination: (fullText.match(/termination/gi) || []).length
+     };
+
+console.log(topics);
+results.innerHTML = `
+  <div style="background:#fff; padding:25px; border-radius:12px;">
+    <h3>Contract Summary</h3>
+
+    <p><strong>Pages:</strong> ${pdf.numPages}</p>
+
+    <p><strong>Key Topics Found</strong></p>
+
+    <ul>
+      <li>Payment Terms (${topics.payment})</li>
+      <li>Defects (${topics.defects})</li>
+      <li>Termination Rights (${topics.termination})</li>
+      <li>Delay Provisions (${topics.delay})</li>
+      <li>Variations (${topics.variations})</li>
+      <li>Warranties (${topics.warranty})</li>
+    </ul>
+  </div>
+`;
+ 
+  
+    };
+
+    reader.readAsArrayBuffer(file);
+
     status.innerText = 'Reading ' + file.name + '...';
+    
     results.innerHTML = '';
     loadingBarContainer.style.display = 'block';
     loadingBar.style.width = '0%';
@@ -253,7 +313,7 @@ button:hover {
             status.innerText = 'Analysis complete.';
             loadingBarContainer.style.display = 'none';
 
-            results.innerHTML = `
+           if (!results.innerHTML) results.innerHTML = `
               <div class="fade-in" style="background:#fff; padding:25px; border-radius:12px; box-shadow:0 5px 15px rgba(0,0,0,0.1); text-align:left;">
 
                 <h3 style="margin-top:0;">Contract Review Summary</h3>
@@ -314,6 +374,8 @@ button:hover {
       }, 500);
     }
   </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 
 </body>
 </html>
