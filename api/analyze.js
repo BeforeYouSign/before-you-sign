@@ -1,37 +1,18 @@
-import { IncomingForm } from 'formidable';
-import fs from 'fs';
-import mammoth from 'mammoth';
-
-// Vercel serverless functions need raw body access for multipart parsing
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
+import { del } from '@vercel/blob';
+import { extractTextFromBlob } from '../lib/extractText.js';
 
 const MODEL = 'claude-sonnet-5';
-const MAX_FILE_BYTES = 4 * 1024 * 1024; // keep comfortably under Vercel's request body limit
 
-// --- Simple in-memory rate limiting -----------------------------------
-// Lives only for as long as this serverless instance stays warm, so it's not
-// a hard global guarantee under heavy scale-out — but it's enough to stop a
-// single bot or a bad TikTok bot spike from running up API costs at launch.
-// For guaranteed limits under real scale, swap this for Vercel KV / Upstash.
 const RATE_LIMIT_WINDOW_MS = 60 * 1000;
 const RATE_LIMIT_MAX_REQUESTS = 5;
-const requestLog = new Map(); // ip -> array of timestamps
+const requestLog = new Map();
 
 function isRateLimited(ip) {
   const now = Date.now();
   const timestamps = (requestLog.get(ip) || []).filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
   timestamps.push(now);
   requestLog.set(ip, timestamps);
-
-  // Keep the map from growing forever on a long-lived warm instance
-  if (requestLog.size > 5000) {
-    requestLog.clear();
-  }
-
+  if (requestLog.size > 5000) requestLog.clear();
   return timestamps.length > RATE_LIMIT_MAX_REQUESTS;
 }
 
@@ -44,7 +25,7 @@ function getClientIp(req) {
 const ANALYSIS_PROMPT = `You are helping a homeowner understand a residential building contract before they sign it.
 You are not their lawyer and this is not legal advice — you are surfacing things worth asking about.
 
-Read the contract text/document provided and respond with ONLY a single JSON object (no markdown
+Read the contract text provided and respond with ONLY a single JSON object (no markdown
 fences, no commentary before or after) matching exactly this shape:
 
 {
@@ -89,60 +70,42 @@ export default async function handler(req, res) {
     return;
   }
 
+  const { blobUrl, filename } = req.body || {};
+  if (!blobUrl || !filename) {
+    res.status(400).json({ error: 'No file reference was provided.' });
+    return;
+  }
+
   try {
-    const form = new IncomingForm({ maxFileSize: MAX_FILE_BYTES });
-
-    const { files } = await new Promise((resolve, reject) => {
-      form.parse(req, (err, fields, files) => {
-        if (err) reject(err);
-        else resolve({ fields, files });
-      });
-    });
-
-    const fileField = files.contract;
-    const file = Array.isArray(fileField) ? fileField[0] : fileField;
-
-    if (!file) {
-      res.status(400).json({ error: 'No file was uploaded.' });
-      return;
-    }
-
-    const filename = file.originalFilename || file.newFilename || '';
-    const ext = filename.split('.').pop().toLowerCase();
-    const buffer = fs.readFileSync(file.filepath);
-
-    let messageContent;
-
-    if (ext === 'pdf') {
-      const base64 = buffer.toString('base64');
-      messageContent = [
-        {
-          type: 'document',
-          source: { type: 'base64', media_type: 'application/pdf', data: base64 },
-        },
-        { type: 'text', text: ANALYSIS_PROMPT },
-      ];
-    } else if (ext === 'docx') {
-      const result = await mammoth.extractRawText({ buffer });
-      const text = (result.value || '').trim();
-
-      if (text.length < 20) {
-        res.status(400).json({ error: 'Could not read any text from that Word document.' });
+    let text;
+    try {
+      const result = await extractTextFromBlob(blobUrl, filename);
+      text = result.text;
+    } catch (err) {
+      if (err.message === 'DOC_UNSUPPORTED') {
+        res.status(400).json({ error: 'Older .doc files are not supported. Please save as .docx or PDF and try again.' });
         return;
       }
+      if (err.message === 'UNSUPPORTED_TYPE') {
+        res.status(400).json({ error: 'Please upload a PDF or Word (.docx) file.' });
+        return;
+      }
+      throw err;
+    }
 
-      messageContent = [
-        { type: 'text', text: `${ANALYSIS_PROMPT}\n\n--- CONTRACT TEXT START ---\n${text.slice(0, 120000)}\n--- CONTRACT TEXT END ---` },
-      ];
-    } else if (ext === 'doc') {
+    if (!text || text.trim().length < 20) {
       res.status(400).json({
-        error: 'Older .doc files are not supported. Please save the document as .docx or .pdf and try again.',
+        error: "We couldn't read any text from that file. If it's a scanned or photographed document, a text-based (digital) version works best.",
       });
       return;
-    } else {
-      res.status(400).json({ error: 'Please upload a PDF or Word (.docx) file.' });
-      return;
     }
+
+    const messageContent = [
+      {
+        type: 'text',
+        text: `${ANALYSIS_PROMPT}\n\n--- CONTRACT TEXT START ---\n${text.slice(0, 350000)}\n--- CONTRACT TEXT END ---`,
+      },
+    ];
 
     const apiRes = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -161,7 +124,7 @@ export default async function handler(req, res) {
     if (!apiRes.ok) {
       const errText = await apiRes.text();
       console.error('Anthropic API error:', apiRes.status, errText);
-      res.status(502).json({ error: 'The analysis service returned an error. Please try again shortly.' });
+      res.status(502).json({ error: 'The review service returned an error. Please try again shortly.' });
       return;
     }
 
@@ -175,18 +138,20 @@ export default async function handler(req, res) {
       parsed = JSON.parse(cleaned);
     } catch (parseErr) {
       console.error('Failed to parse model output as JSON:', raw);
-      res.status(502).json({ error: 'Received an unexpected response while analysing the contract. Please try again.' });
+      res.status(502).json({ error: 'Received an unexpected response while reviewing the contract. Please try again.' });
       return;
     }
 
     res.status(200).json(parsed);
   } catch (err) {
     console.error(err);
-    if (err && err.code === 1009) {
-      // formidable maxFileSize exceeded
-      res.status(413).json({ error: 'That file is too large. Please upload a file under 4MB.' });
-      return;
+    res.status(500).json({ error: 'Something went wrong while reviewing your contract. Please try again.' });
+  } finally {
+    // Clean up the stored file now that we're done with it, successful or not.
+    try {
+      await del(blobUrl);
+    } catch (delErr) {
+      console.error('Failed to delete blob after processing:', delErr);
     }
-    res.status(500).json({ error: 'Something went wrong while analysing your contract. Please try again.' });
   }
 }

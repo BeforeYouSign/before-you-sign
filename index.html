@@ -25,65 +25,79 @@
 
   * { box-sizing: border-box; }
 
+  html { scroll-behavior: smooth; }
+
   body {
     margin: 0;
     font-family: var(--sans);
+    font-size: 17px;
     background: var(--paper);
     color: var(--ink);
-    line-height: 1.55;
+    line-height: 1.6;
+    background-image:
+      linear-gradient(rgba(22,35,59,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(22,35,59,0.035) 1px, transparent 1px);
+    background-size: 34px 34px;
   }
 
   h1, h2, h3 { font-family: var(--serif); font-weight: 600; margin: 0; color: var(--ink); }
+  p { margin: 0 0 1em 0; color: var(--ink-soft); font-size: 1rem; }
 
-  p { margin: 0 0 1em 0; color: var(--ink-soft); }
-
-  .wrap { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 24px; }
 
   /* ---------- Header ---------- */
   header {
-    background: var(--paper-raised);
+    background: rgba(255,255,255,0.94);
+    backdrop-filter: blur(8px);
     border-bottom: 1px solid var(--line);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    box-shadow: 0 8px 24px -18px rgba(22,35,59,0.4);
   }
   .header-inner {
-    max-width: 760px;
+    max-width: 880px;
     margin: 0 auto;
-    padding: 18px 24px;
+    padding: 16px 24px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
   }
-  .header-inner img { height: 40px; display: block; }
-  .header-tag { font-size: 13px; color: var(--text-secondary); text-align: right; }
+  .header-inner img { height: 72px; display: block; }
+  .header-tag { font-size: 15px; font-weight: 500; color: var(--ink-soft); text-align: right; max-width: 240px; }
 
   /* ---------- Hero ---------- */
-  .hero { padding: 64px 0 40px 0; animation: rise 0.7s ease-out; }
-  @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  .hero { padding: 52px 0 36px 0; animation: rise 0.8s ease-out; }
+  @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
 
   .hero h1 {
-    font-size: 40px;
-    line-height: 1.18;
-    letter-spacing: -0.01em;
+    font-size: 60px;
+    line-height: 1.1;
+    letter-spacing: -0.015em;
     max-width: 15ch;
   }
   .hero .lede {
-    font-size: 18px;
+    font-size: 23px;
+    line-height: 1.5;
     color: var(--ink-soft);
-    margin-top: 18px;
-    max-width: 52ch;
+    margin-top: 22px;
+    max-width: 50ch;
   }
   .hero .fine-print {
-    font-size: 13px;
-    color: var(--text-secondary);
-    margin-top: 4px;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--ink-soft);
+    margin-top: 6px;
   }
 
   /* ---------- Upload panel ---------- */
   .panel {
     background: var(--paper-raised);
     border: 1px solid var(--line);
-    padding: 28px;
-    margin-top: 28px;
+    padding: 32px;
+    margin-top: 32px;
+    box-shadow: 0 24px 48px -32px rgba(22,35,59,0.35);
   }
 
   .file-row {
@@ -91,158 +105,220 @@
     align-items: center;
     gap: 14px;
     flex-wrap: wrap;
-    padding: 16px;
+    padding: 18px;
     border: 1px dashed var(--line);
   }
-  .file-row input[type="file"] { font-family: var(--sans); font-size: 14px; }
-  .file-hint { font-size: 13px; color: var(--text-secondary); }
+  .file-row input[type="file"] { font-family: var(--sans); font-size: 15.5px; max-width: 100%; }
+  .file-hint { font-size: 14px; color: var(--text-secondary); }
 
   .ack-row {
     display: flex;
     align-items: flex-start;
     gap: 10px;
     margin-top: 18px;
-    font-size: 13px;
+    font-size: 14.5px;
     color: var(--ink-soft);
   }
-  .ack-row input { margin-top: 3px; }
+  .ack-row input { margin-top: 3px; flex: none; }
 
   button {
     font-family: var(--sans);
     font-weight: 600;
-    font-size: 15px;
-    padding: 13px 22px;
+    font-size: 16.5px;
+    padding: 16px 26px;
+    min-height: 50px;
     background: var(--ink);
     color: var(--paper-raised);
     border: none;
     cursor: pointer;
-    transition: background 0.15s ease;
+    transition: background 0.15s ease, transform 0.1s ease;
   }
   button:hover { background: var(--ink-soft); }
+  button:active { transform: translateY(1px); }
   button:disabled { background: #9aa1ae; cursor: not-allowed; }
   .btn-amber { background: var(--amber); }
   .btn-amber:hover { background: #8f5309; }
+  .btn-full { width: 100%; }
 
-  .primary-action { margin-top: 20px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-  #statusMessage { font-size: 14px; color: var(--ink-soft); margin: 0; }
+  .primary-action { margin-top: 22px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  #statusMessage { font-size: 15.5px; color: var(--ink-soft); margin: 0; }
 
-  .progress-track { width: 100%; height: 6px; background: var(--line); margin-top: 20px; display: none; }
+  .progress-track { width: 100%; height: 6px; background: var(--line); margin-top: 22px; display: none; }
   .progress-fill { width: 0%; height: 100%; background: var(--ink); transition: width 0.4s ease; }
 
   /* ---------- Steps ---------- */
-  .steps { padding: 48px 0; }
-  .steps h2 { font-size: 26px; margin-bottom: 28px; }
+  .steps { padding: 44px 0; }
+  .steps h2 { font-size: 34px; margin-bottom: 26px; }
   .step-list { list-style: none; margin: 0; padding: 0; }
   .step-list li {
     display: flex;
-    gap: 18px;
-    padding: 18px 0;
+    gap: 22px;
+    padding: 22px 0;
     border-top: 1px solid var(--line);
   }
   .step-list li:last-child { border-bottom: 1px solid var(--line); }
   .step-num {
     font-family: var(--serif);
-    font-size: 20px;
+    font-size: 26px;
     color: var(--amber);
     flex: none;
-    width: 28px;
+    width: 34px;
   }
-  .step-body strong { display: block; font-size: 16px; color: var(--ink); margin-bottom: 4px; }
-  .step-body span { font-size: 14px; color: var(--text-secondary); }
+  .step-body strong { display: block; font-size: 20px; color: var(--ink); margin-bottom: 5px; }
+  .step-body span { font-size: 16.5px; color: var(--ink-soft); }
 
   /* ---------- Free scan results ---------- */
-  #scanResults { margin-top: 28px; display: none; }
-  .scan-heading { font-size: 20px; margin-bottom: 6px; }
-  .scan-sub { font-size: 14px; color: var(--text-secondary); margin-bottom: 20px; }
+  #scanResults { margin-top: 30px; display: none; }
+  .scan-heading { font-size: 24px; margin-bottom: 8px; }
+  .scan-sub { font-size: 15.5px; color: var(--ink-soft); margin-bottom: 22px; }
 
   .flag-row {
     display: flex;
     align-items: center;
     gap: 14px;
-    padding: 14px 0;
+    padding: 16px 0;
     border-top: 1px solid var(--line);
   }
   .flag-row:last-child { border-bottom: 1px solid var(--line); }
-  .flag-mark {
-    flex: none;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: var(--amber);
-  }
-  .flag-label { font-size: 15px; color: var(--ink); flex: 1; }
-  .flag-lock { font-size: 12px; color: var(--text-secondary); white-space: nowrap; }
+  .flag-mark { flex: none; width: 11px; height: 11px; border-radius: 50%; background: var(--amber); }
+  .flag-label { font-size: 17px; color: var(--ink); flex: 1; font-weight: 500; }
+  .flag-lock { font-size: 13px; color: var(--text-secondary); white-space: nowrap; }
 
   /* ---------- Paywall ---------- */
   .paywall {
-    margin-top: 24px;
+    margin-top: 26px;
     background: var(--ink);
     color: var(--paper-raised);
-    padding: 32px 28px;
+    padding: 36px 30px;
     position: relative;
     overflow: hidden;
   }
   .paywall::before {
     content: "";
     position: absolute;
-    top: -40px;
-    right: -40px;
-    width: 140px;
-    height: 140px;
-    border: 2px solid rgba(255,255,255,0.15);
+    top: -50px;
+    right: -50px;
+    width: 160px;
+    height: 160px;
+    border: 2px solid rgba(255,255,255,0.14);
     border-radius: 50%;
   }
   .paywall::after {
     content: "";
     position: absolute;
-    top: -10px;
-    right: -10px;
-    width: 90px;
-    height: 90px;
-    border: 2px dashed rgba(201,122,31,0.55);
+    top: -14px;
+    right: -14px;
+    width: 100px;
+    height: 100px;
+    border: 2px dashed rgba(165,98,15,0.6);
     border-radius: 50%;
   }
-  .paywall h3 { color: var(--paper-raised); font-size: 22px; }
-  .paywall .price { font-family: var(--serif); font-size: 34px; margin: 10px 0 6px 0; }
-  .paywall .price span { font-size: 15px; font-family: var(--sans); color: rgba(255,255,255,0.7); }
-  .paywall ul { margin: 18px 0 24px 0; padding: 0; list-style: none; }
-  .paywall li { font-size: 14px; padding: 6px 0; color: rgba(255,255,255,0.85); }
+  .paywall h3 { color: var(--paper-raised); font-size: 26px; }
+  .paywall .price { font-family: var(--serif); font-size: 42px; margin: 12px 0 8px 0; }
+  .paywall .price span { font-size: 16px; font-family: var(--sans); color: rgba(255,255,255,0.75); }
+  .paywall ul { margin: 20px 0 28px 0; padding: 0; list-style: none; }
+  .paywall li { font-size: 16px; padding: 7px 0; color: rgba(255,255,255,0.9); }
   .paywall li::before { content: "— "; color: var(--amber); }
+  .paywall .see-pricing { font-size: 14.5px; color: rgba(255,255,255,0.7); margin-top: 16px; }
+  .paywall .see-pricing a { color: rgba(255,255,255,0.95); }
 
   /* ---------- Full review results ---------- */
-  #fullResults { margin-top: 28px; display: none; }
-  .result-block {
-    background: var(--paper-raised);
-    border: 1px solid var(--line);
-    padding: 28px;
-  }
-  .result-summary { font-size: 15px; color: var(--ink-soft); border-bottom: 1px solid var(--line); padding-bottom: 20px; margin-bottom: 20px; }
-  .item { padding: 16px 0; border-top: 1px solid var(--line); }
+  #fullResults { margin-top: 30px; display: none; }
+  .result-block { background: var(--paper-raised); border: 1px solid var(--line); padding: 32px; }
+  .result-summary { font-size: 17px; color: var(--ink-soft); border-bottom: 1px solid var(--line); padding-bottom: 20px; margin-bottom: 20px; }
+  .item { padding: 18px 0; border-top: 1px solid var(--line); }
   .item:first-of-type { border-top: none; }
-  .item-tag { font-size: 12px; font-weight: 600; color: var(--amber); }
+  .item-tag { font-size: 13px; font-weight: 600; color: var(--amber); letter-spacing: 0.01em; }
   .item-tag.time { color: var(--forest); }
-  .item-title { font-size: 16px; color: var(--ink); margin: 4px 0 6px 0; font-weight: 600; }
-  .item-desc { font-size: 14px; color: var(--ink-soft); margin-bottom: 6px; }
-  .item-q { font-size: 13px; color: var(--text-secondary); font-style: italic; }
+  .item-title { font-size: 18.5px; color: var(--ink); margin: 5px 0 7px 0; font-weight: 600; }
+  .item-desc { font-size: 16px; color: var(--ink-soft); margin-bottom: 7px; }
+  .item-q { font-size: 14.5px; color: var(--text-secondary); font-style: italic; }
 
-  /* ---------- Trust section ---------- */
-  .trust { padding: 48px 0; }
-  .trust h2 { font-size: 24px; margin-bottom: 18px; }
+  /* ---------- Trust ---------- */
+  .trust { padding: 44px 0 56px 0; }
+  .trust h2 { font-size: 34px; margin-bottom: 22px; }
   .trust ul { margin: 0; padding: 0; list-style: none; }
-  .trust li { font-size: 15px; color: var(--ink-soft); padding: 8px 0; border-top: 1px solid var(--line); }
+  .trust li { font-size: 17px; color: var(--ink-soft); padding: 11px 0; border-top: 1px solid var(--line); }
   .trust li:last-child { border-bottom: 1px solid var(--line); }
 
-  /* ---------- Footer ---------- */
-  footer {
-    border-top: 1px solid var(--line);
-    padding: 32px 0 48px 0;
-  }
-  footer p { font-size: 12px; color: var(--text-secondary); max-width: 60ch; }
+  /* ---------- Pricing ---------- */
+  .pricing { padding: 44px 0; }
+  .pricing h2 { font-size: 34px; }
+  .pricing .sub { font-size: 17px; color: var(--ink-soft); margin-top: 10px; margin-bottom: 30px; }
 
+  .price-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .price-card {
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    padding: 26px;
+    display: flex;
+    flex-direction: column;
+  }
+  .price-card.featured { border: 1px solid var(--amber); position: relative; }
+  .price-card.featured::before {
+    content: "Most popular";
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: var(--amber);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 5px 10px;
+  }
+  .price-card h3 { font-size: 22px; }
+  .price-card .amount { font-family: var(--serif); font-size: 36px; margin: 12px 0 6px 0; color: var(--ink); }
+  .price-card .amount span { font-size: 15px; font-family: var(--sans); color: var(--text-secondary); }
+  .price-card p { font-size: 16px; margin-top: 12px; margin-bottom: 0; flex: 1; }
+
+  .price-addon {
+    margin-top: 20px;
+    padding: 20px 24px;
+    border: 1px dashed var(--line);
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .price-addon strong { font-family: var(--serif); font-size: 20px; color: var(--ink); }
+  .price-addon span { font-size: 15.5px; color: var(--ink-soft); }
+
+  .pricing .tagline { margin-top: 22px; font-size: 15.5px; color: var(--ink-soft); font-style: italic; }
+
+  /* ---------- Footer ---------- */
+  footer { border-top: 1px solid var(--line); padding: 32px 0 48px 0; }
+  footer p { font-size: 13.5px; color: var(--text-secondary); max-width: 62ch; }
+
+  /* ---------- Responsive: tablets (e.g. iPad) ---------- */
+  @media (max-width: 900px) {
+    body { font-size: 16.5px; }
+    .hero h1 { font-size: 46px; }
+    .hero .lede { font-size: 20px; }
+    .steps h2, .pricing h2, .trust h2 { font-size: 30px; }
+    .price-grid { grid-template-columns: 1fr 1fr; gap: 16px; }
+  }
+
+  /* ---------- Responsive: phones ---------- */
   @media (max-width: 600px) {
-    .hero h1 { font-size: 30px; }
-    .hero .lede { font-size: 16px; }
+    body { font-size: 16px; }
+    .header-inner img { height: 52px; }
     .header-tag { display: none; }
+    .hero { padding: 36px 0 24px 0; }
+    .hero h1 { font-size: 34px; max-width: 100%; line-height: 1.16; }
+    .hero .lede { font-size: 18px; }
+    .steps h2, .pricing h2, .trust h2 { font-size: 26px; }
+    .panel { padding: 22px 18px; }
+    .price-grid { grid-template-columns: 1fr; }
+    .price-card.featured::before { position: static; display: inline-block; margin-bottom: 10px; }
+    .paywall { padding: 26px 20px; }
+    .paywall .price { font-size: 34px; }
+    .primary-action { flex-direction: column; align-items: stretch; }
+    .primary-action button { width: 100%; }
   }
 </style>
 </head>
@@ -268,7 +344,7 @@
     <div class="panel">
       <div class="file-row">
         <input type="file" id="contractFile" accept=".pdf,.docx">
-        <span class="file-hint">PDF or Word (.docx), under 4MB</span>
+        <span class="file-hint">PDF or Word (.docx), up to 150MB</span>
       </div>
 
       <div class="ack-row">
@@ -277,7 +353,7 @@
       </div>
 
       <div class="primary-action">
-        <button id="scanButton" onclick="runFreeScan()">Scan My Contract — Free</button>
+        <button id="scanButton">Scan My Contract — Free</button>
         <p id="statusMessage"></p>
       </div>
 
@@ -295,7 +371,7 @@
         <span class="step-num">1</span>
         <div class="step-body">
           <strong>Upload your contract</strong>
-          <span>Select your building contract as a PDF or Word document.</span>
+          <span>Select your building contract as a PDF or Word document — even large scanned copies.</span>
         </div>
       </li>
       <li>
@@ -313,6 +389,31 @@
         </div>
       </li>
     </ul>
+  </section>
+
+  <section class="pricing" id="pricing">
+    <h2>Pricing</h2>
+    <p class="sub">One payment. No subscription. Know what to ask before you sign.</p>
+
+    <div class="price-grid">
+      <div class="price-card">
+        <h3>Single Review</h3>
+        <div class="amount">$24.95</div>
+        <p>One residential building contract reviewed. Receive a plain-English summary and a personalised list of questions to ask your builder.</p>
+      </div>
+      <div class="price-card featured">
+        <h3>3 Review Pack</h3>
+        <div class="amount">$39.95</div>
+        <p>Up to three reviews for the same building project. Ideal for your original contract, builder revisions, and the final version — unused reviews stay available for later.</p>
+      </div>
+    </div>
+
+    <div class="price-addon">
+      <div><strong>Supporting Documents</strong><br><span>Specifications, inclusions, quotations, special conditions and more, reviewed alongside your contract for consistency.</span></div>
+      <strong>+$3.50 each</strong>
+    </div>
+
+    <p class="tagline">One payment. No subscription. Know what to ask before you sign.</p>
   </section>
 
   <section class="trust">
@@ -338,8 +439,10 @@
   </div>
 </footer>
 
-<script>
-  let selectedFile = null;
+<script type="module">
+  const MAX_UPLOAD_BYTES = 150 * 1024 * 1024;
+  let uploadedBlob = null; // { url, filename }
+  let uploadFn = null;
 
   const FLAG_LABELS = {
     variation: 'Variation & change-order pricing',
@@ -366,6 +469,13 @@
     if (!show) setProgress(0);
   }
 
+  async function getUploadFn() {
+    if (uploadFn) return uploadFn;
+    const mod = await import('https://esm.sh/@vercel/blob@2.0.0/client');
+    uploadFn = mod.upload;
+    return uploadFn;
+  }
+
   function validateFileAndAck() {
     const fileInput = document.getElementById('contractFile');
     const status = document.getElementById('statusMessage');
@@ -385,8 +495,8 @@
       status.innerText = 'Please upload a PDF or Word (.docx) file.';
       return null;
     }
-    if (file.size > 4 * 1024 * 1024) {
-      status.innerText = 'That file is too large. Please upload a file under 4MB.';
+    if (file.size > MAX_UPLOAD_BYTES) {
+      status.innerText = 'That file is too large. Please upload a file under 150MB.';
       return null;
     }
     status.innerText = '';
@@ -396,7 +506,6 @@
   async function runFreeScan() {
     const file = validateFileAndAck();
     if (!file) return;
-    selectedFile = file;
 
     const status = document.getElementById('statusMessage');
     const scanButton = document.getElementById('scanButton');
@@ -407,18 +516,34 @@
     fullResults.innerHTML = '';
     scanResults.style.display = 'none';
     scanResults.innerHTML = '';
+    uploadedBlob = null;
 
     scanButton.disabled = true;
-    status.innerText = 'Reading your document...';
+    status.innerText = 'Uploading your document...';
     showProgress(true);
-    setProgress(20);
+    setProgress(10);
 
     try {
-      const formData = new FormData();
-      formData.append('contract', file);
+      const upload = await getUploadFn();
+      const blob = await upload(file.name, file, {
+        access: 'public',
+        handleUploadUrl: '/api/blob-upload',
+        onUploadProgress: ({ percentage }) => {
+          setProgress(10 + percentage * 0.5); // upload = first half of the bar
+        },
+      });
 
-      const response = await fetch('/api/scan', { method: 'POST', body: formData });
-      setProgress(90);
+      uploadedBlob = { url: blob.url, filename: file.name };
+
+      status.innerText = 'Reading your document...';
+      setProgress(65);
+
+      const response = await fetch('/api/scan', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ blobUrl: uploadedBlob.url, filename: uploadedBlob.filename }),
+      });
+      setProgress(95);
       const data = await response.json();
 
       if (!response.ok) {
@@ -466,24 +591,26 @@
     html += `
       <div class="paywall">
         <h3>Unlock the full review</h3>
-        <div class="price">$29<span> one-time</span></div>
+        <div class="price">$24.95<span> single review</span></div>
         <ul>
           <li>Plain-English explanation for every flagged clause</li>
           <li>Specific questions to ask your builder before signing</li>
           <li>A full read-through of your contract, not just a keyword pass</li>
         </ul>
-        <button class="btn-amber" id="unlockButton" onclick="unlockFullReview()">Unlock Full Review</button>
+        <button class="btn-amber btn-full" id="unlockButton">Unlock Full Review</button>
+        <div class="see-pricing">Reviewing more than one document? <a href="#pricing">See the 3 Review Pack</a>.</div>
       </div>`;
 
     scanResults.innerHTML = html;
     scanResults.style.display = 'block';
+    document.getElementById('unlockButton').addEventListener('click', unlockFullReview);
   }
 
   async function unlockFullReview() {
-    // NOTE for the site owner: this currently calls the full review directly —
+    // NOTE for the site owner: this currently runs the full review directly —
     // there is no payment step wired in yet. When Stripe is connected, gate
     // this call behind a successful checkout/payment confirmation instead.
-    if (!selectedFile) return;
+    if (!uploadedBlob) return;
 
     const status = document.getElementById('statusMessage');
     const unlockButton = document.getElementById('unlockButton');
@@ -499,20 +626,21 @@
     let progress = 15;
     const timer = setInterval(() => {
       if (progress < 85) {
-        progress += Math.random() * 6;
+        progress += Math.random() * 5;
         setProgress(Math.min(progress, 85));
       }
       if (Math.floor(progress / 25) > msgIndex && msgIndex < messages.length - 1) {
         msgIndex += 1;
         status.innerText = messages[msgIndex];
       }
-    }, 900);
+    }, 1000);
 
     try {
-      const formData = new FormData();
-      formData.append('contract', selectedFile);
-
-      const response = await fetch('/api/analyze', { method: 'POST', body: formData });
+      const response = await fetch('/api/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ blobUrl: uploadedBlob.url, filename: uploadedBlob.filename }),
+      });
       clearInterval(timer);
       setProgress(100);
       const data = await response.json();
@@ -581,6 +709,8 @@
     fullResults.innerHTML = html;
     fullResults.style.display = 'block';
   }
+
+  document.getElementById('scanButton').addEventListener('click', runFreeScan);
 </script>
 
 </body>

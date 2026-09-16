@@ -1,19 +1,7 @@
-import { IncomingForm } from 'formidable';
-import fs from 'fs';
-import mammoth from 'mammoth';
-import pdfParse from 'pdf-parse';
+import { extractTextFromBlob } from '../lib/extractText.js';
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
-
-const MAX_FILE_BYTES = 4 * 1024 * 1024;
-
-// --- Shared in-memory rate limiting (mirrors api/analyze.js) -----------
 const RATE_LIMIT_WINDOW_MS = 60 * 1000;
-const RATE_LIMIT_MAX_REQUESTS = 10; // scan is cheap, allow more than the full review
+const RATE_LIMIT_MAX_REQUESTS = 10;
 const requestLog = new Map();
 
 function isRateLimited(ip) {
@@ -31,11 +19,10 @@ function getClientIp(req) {
   return req.socket?.remoteAddress || 'unknown';
 }
 
-// --- What the free pass looks for ---------------------------------------
 // Plain keyword/pattern matching only — this never touches the paid review
-// engine. It exists purely to show the visitor that specific, real sections
-// of their own document are worth a closer look, before they unlock the
-// full plain-English breakdown.
+// engine and costs nothing to run. It exists to show the visitor that
+// specific, real sections of their own document are worth a closer look,
+// before they unlock the full plain-English breakdown.
 const CLAUSE_RULES = [
   { id: 'variation', label: 'Variation & change-order pricing', patterns: [/variation/i, /change order/i, /additional works?/i] },
   { id: 'provisional', label: 'Provisional sums & allowances', patterns: [/provisional sum/i, /\bPC item/i, /prime cost/i, /\ballowance/i] },
@@ -69,46 +56,32 @@ export default async function handler(req, res) {
   }
 
   try {
-    const form = new IncomingForm({ maxFileSize: MAX_FILE_BYTES });
-    const { files } = await new Promise((resolve, reject) => {
-      form.parse(req, (err, fields, files) => {
-        if (err) reject(err);
-        else resolve({ fields, files });
-      });
-    });
-
-    const fileField = files.contract;
-    const file = Array.isArray(fileField) ? fileField[0] : fileField;
-
-    if (!file) {
-      res.status(400).json({ error: 'No file was uploaded.' });
+    const { blobUrl, filename } = req.body || {};
+    if (!blobUrl || !filename) {
+      res.status(400).json({ error: 'No file reference was provided.' });
       return;
     }
 
-    const filename = file.originalFilename || file.newFilename || '';
-    const ext = filename.split('.').pop().toLowerCase();
-    const buffer = fs.readFileSync(file.filepath);
+    let text;
+    try {
+      const result = await extractTextFromBlob(blobUrl, filename);
+      text = result.text;
+    } catch (err) {
+      if (err.message === 'DOC_UNSUPPORTED') {
+        res.status(400).json({ error: 'Older .doc files are not supported. Please save as .docx or PDF and try again.' });
+        return;
+      }
+      if (err.message === 'UNSUPPORTED_TYPE') {
+        res.status(400).json({ error: 'Please upload a PDF or Word (.docx) file.' });
+        return;
+      }
+      throw err;
+    }
 
-    let text = '';
-
-    if (ext === 'pdf') {
-      const parsed = await pdfParse(buffer);
-      text = parsed.text || '';
-    } else if (ext === 'docx') {
-      const result = await mammoth.extractRawText({ buffer });
-      text = result.value || '';
-    } else if (ext === 'doc') {
+    if (!text || text.trim().length < 20) {
       res.status(400).json({
-        error: 'Older .doc files are not supported. Please save the document as .docx or .pdf and try again.',
+        error: "We couldn't read any text from that file. If it's a scanned or photographed document, a text-based (digital) version works best.",
       });
-      return;
-    } else {
-      res.status(400).json({ error: 'Please upload a PDF or Word (.docx) file.' });
-      return;
-    }
-
-    if (text.trim().length < 20) {
-      res.status(400).json({ error: 'Could not read any text from that file.' });
       return;
     }
 
@@ -116,10 +89,6 @@ export default async function handler(req, res) {
     res.status(200).json({ flagged, documentLength: text.length });
   } catch (err) {
     console.error(err);
-    if (err && err.code === 1009) {
-      res.status(413).json({ error: 'That file is too large. Please upload a file under 4MB.' });
-      return;
-    }
     res.status(500).json({ error: 'Something went wrong while scanning your contract. Please try again.' });
   }
 }

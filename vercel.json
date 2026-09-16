@@ -1,7 +1,13 @@
 {
   "functions": {
     "api/analyze.js": {
-      "maxDuration": 60
+      "maxDuration": 120
+    },
+    "api/scan.js": {
+      "maxDuration": 90
+    },
+    "api/blob-upload.js": {
+      "maxDuration": 30
     }
   }
 }
