@@ -1,0 +1,13 @@
+{
+  "name": "before-you-sign",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Upload a building contract and get an AI-generated, plain-English summary of key risks, cost concerns, and questions to ask before signing.",
+  "scripts": {
+    "dev": "vercel dev"
+  },
+  "dependencies": {
+    "formidable": "^3.5.1",
+    "mammoth": "^1.7.2"
+  }
+}
