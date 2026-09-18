@@ -1,0 +1,14 @@
+{
+  "name": "before-you-sign",
+  "version": "3.0.0",
+  "private": true,
+  "description": "Upload a building contract, get a free scan of clauses worth a closer look, then unlock a full plain-English review before you sign.",
+  "scripts": {
+    "dev": "vercel dev"
+  },
+  "dependencies": {
+    "@vercel/blob": "^2.0.0",
+    "mammoth": "^1.7.2",
+    "pdf-parse": "^1.1.1"
+  }
+}
