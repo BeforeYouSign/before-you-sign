@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Before You Sign — Building Contract Review</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Upload your building contract, get a free scan of clauses worth a closer look, then unlock a full plain-English review before you sign.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #16233B;
+    --ink-soft: #3A4658;
+    --paper: #EFF0EA;
+    --paper-raised: #FFFFFF;
+    --line: #CBC4B3;
+    --amber: #A5620F;
+    --amber-bg: #F3E4CC;
+    --forest: #3F6D53;
+    --text-secondary: #5B5F66;
+    --serif: 'Source Serif 4', Georgia, serif;
+    --sans: 'IBM Plex Sans', -apple-system, Segoe UI, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    font-family: var(--sans);
+    font-size: 17px;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.6;
+    background-image:
+      linear-gradient(rgba(22,35,59,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(22,35,59,0.035) 1px, transparent 1px);
+    background-size: 34px 34px;
+  }
+
+  h1, h2, h3 { font-family: var(--serif); font-weight: 600; margin: 0; color: var(--ink); }
+  p { margin: 0 0 1em 0; color: var(--ink-soft); font-size: 1rem; }
+
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+
+  /* ---------- Header ---------- */
+  header {
+    background: rgba(255,255,255,0.94);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    box-shadow: 0 8px 24px -18px rgba(22,35,59,0.4);
+  }
+  .header-inner {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .header-inner img { height: 72px; display: block; }
+  .header-tag { font-size: 15px; font-weight: 500; color: var(--ink-soft); text-align: right; max-width: 240px; }
+
+  /* ---------- Hero ---------- */
+  .hero { padding: 52px 0 36px 0; animation: rise 0.8s ease-out; }
+  @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+
+  .hero h1 {
+    font-size: 60px;
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    max-width: 15ch;
+  }
+  .hero .lede {
+    font-size: 23px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    margin-top: 22px;
+    max-width: 50ch;
+  }
+  .hero .fine-print {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--ink-soft);
+    margin-top: 6px;
+  }
+
+  /* ---------- Upload panel ---------- */
+  .panel {
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    padding: 32px;
+    margin-top: 32px;
+    box-shadow: 0 24px 48px -32px rgba(22,35,59,0.35);
+  }
+
+  .file-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    padding: 18px;
+    border: 1px dashed var(--line);
+  }
+  .file-row input[type="file"] { font-family: var(--sans); font-size: 15.5px; max-width: 100%; }
+  .file-hint { font-size: 14px; color: var(--text-secondary); }
+
+  .ack-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 18px;
+    font-size: 14.5px;
+    color: var(--ink-soft);
+  }
+  .ack-row input { margin-top: 3px; flex: none; }
+
+  button {
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 16.5px;
+    padding: 16px 26px;
+    min-height: 50px;
+    background: var(--ink);
+    color: var(--paper-raised);
+    border: none;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.1s ease;
+  }
+  button:hover { background: var(--ink-soft); }
+  button:active { transform: translateY(1px); }
+  button:disabled { background: #9aa1ae; cursor: not-allowed; }
+  .btn-amber { background: var(--amber); }
+  .btn-amber:hover { background: #8f5309; }
+  .btn-full { width: 100%; }
+
+  .primary-action { margin-top: 22px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  #statusMessage { font-size: 15.5px; color: var(--ink-soft); margin: 0; }
+
+  .progress-track { width: 100%; height: 6px; background: var(--line); margin-top: 22px; display: none; }
+  .progress-fill { width: 0%; height: 100%; background: var(--ink); transition: width 0.4s ease; }
+
+  /* ---------- Steps ---------- */
+  .steps { padding: 44px 0; }
+  .steps h2 { font-size: 34px; margin-bottom: 26px; }
+  .step-list { list-style: none; margin: 0; padding: 0; }
+  .step-list li {
+    display: flex;
+    gap: 22px;
+    padding: 22px 0;
+    border-top: 1px solid var(--line);
+  }
+  .step-list li:last-child { border-bottom: 1px solid var(--line); }
+  .step-num {
+    font-family: var(--serif);
+    font-size: 26px;
+    color: var(--amber);
+    flex: none;
+    width: 34px;
+  }
+  .step-body strong { display: block; font-size: 20px; color: var(--ink); margin-bottom: 5px; }
+  .step-body span { font-size: 16.5px; color: var(--ink-soft); }
+
+  /* ---------- Free scan results ---------- */
+  #scanResults { margin-top: 30px; display: none; }
+  .scan-heading { font-size: 24px; margin-bottom: 8px; }
+  .scan-sub { font-size: 15.5px; color: var(--ink-soft); margin-bottom: 22px; }
+
+  .flag-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 0;
+    border-top: 1px solid var(--line);
+  }
+  .flag-row:last-child { border-bottom: 1px solid var(--line); }
+  .flag-mark { flex: none; width: 11px; height: 11px; border-radius: 50%; background: var(--amber); }
+  .flag-label { font-size: 17px; color: var(--ink); flex: 1; font-weight: 500; }
+  .flag-lock { font-size: 13px; color: var(--text-secondary); white-space: nowrap; }
+
+  /* ---------- Paywall ---------- */
+  .paywall {
+    margin-top: 26px;
+    background: var(--ink);
+    color: var(--paper-raised);
+    padding: 36px 30px;
+    position: relative;
+    overflow: hidden;
+  }
+  .paywall::before {
+    content: "";
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 160px;
+    height: 160px;
+    border: 2px solid rgba(255,255,255,0.14);
+    border-radius: 50%;
+  }
+  .paywall::after {
+    content: "";
+    position: absolute;
+    top: -14px;
+    right: -14px;
+    width: 100px;
+    height: 100px;
+    border: 2px dashed rgba(165,98,15,0.6);
+    border-radius: 50%;
+  }
+  .paywall h3 { color: var(--paper-raised); font-size: 26px; }
+  .paywall .price { font-family: var(--serif); font-size: 42px; margin: 12px 0 8px 0; }
+  .paywall .price span { font-size: 16px; font-family: var(--sans); color: rgba(255,255,255,0.75); }
+  .paywall ul { margin: 20px 0 28px 0; padding: 0; list-style: none; }
+  .paywall li { font-size: 16px; padding: 7px 0; color: rgba(255,255,255,0.9); }
+  .paywall li::before { content: "— "; color: var(--amber); }
+  .paywall .see-pricing { font-size: 14.5px; color: rgba(255,255,255,0.7); margin-top: 16px; }
+  .paywall .see-pricing a { color: rgba(255,255,255,0.95); }
+
+  /* ---------- Full review results ---------- */
+  #fullResults { margin-top: 30px; display: none; }
+  .result-block { background: var(--paper-raised); border: 1px solid var(--line); padding: 32px; }
+  .result-summary { font-size: 17px; color: var(--ink-soft); border-bottom: 1px solid var(--line); padding-bottom: 20px; margin-bottom: 20px; }
+  .item { padding: 18px 0; border-top: 1px solid var(--line); }
+  .item:first-of-type { border-top: none; }
+  .item-tag { font-size: 13px; font-weight: 600; color: var(--amber); letter-spacing: 0.01em; }
+  .item-tag.time { color: var(--forest); }
+  .item-title { font-size: 18.5px; color: var(--ink); margin: 5px 0 7px 0; font-weight: 600; }
+  .item-desc { font-size: 16px; color: var(--ink-soft); margin-bottom: 7px; }
+  .item-q { font-size: 14.5px; color: var(--text-secondary); font-style: italic; }
+
+  /* ---------- Trust ---------- */
+  .trust { padding: 44px 0 56px 0; }
+  .trust h2 { font-size: 34px; margin-bottom: 22px; }
+  .trust ul { margin: 0; padding: 0; list-style: none; }
+  .trust li { font-size: 17px; color: var(--ink-soft); padding: 11px 0; border-top: 1px solid var(--line); }
+  .trust li:last-child { border-bottom: 1px solid var(--line); }
+
+  /* ---------- Pricing ---------- */
+  .pricing { padding: 44px 0; }
+  .pricing h2 { font-size: 34px; }
+  .pricing .sub { font-size: 17px; color: var(--ink-soft); margin-top: 10px; margin-bottom: 30px; }
+
+  .price-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .price-card {
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    padding: 26px;
+    display: flex;
+    flex-direction: column;
+  }
+  .price-card.featured { border: 1px solid var(--amber); position: relative; }
+  .price-card.featured::before {
+    content: "Most popular";
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: var(--amber);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 5px 10px;
+  }
+  .price-card h3 { font-size: 22px; }
+  .price-card .amount { font-family: var(--serif); font-size: 36px; margin: 12px 0 6px 0; color: var(--ink); }
+  .price-card .amount span { font-size: 15px; font-family: var(--sans); color: var(--text-secondary); }
+  .price-card p { font-size: 16px; margin-top: 12px; margin-bottom: 0; flex: 1; }
+
+  .price-addon {
+    margin-top: 20px;
+    padding: 20px 24px;
+    border: 1px dashed var(--line);
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .price-addon strong { font-family: var(--serif); font-size: 20px; color: var(--ink); }
+  .price-addon span { font-size: 15.5px; color: var(--ink-soft); }
+
+  .pricing .tagline { margin-top: 22px; font-size: 15.5px; color: var(--ink-soft); font-style: italic; }
+
+  /* ---------- Footer ---------- */
+  footer { border-top: 1px solid var(--line); padding: 32px 0 48px 0; }
+  footer p { font-size: 13.5px; color: var(--text-secondary); max-width: 62ch; }
+
+  /* ---------- Responsive: tablets (e.g. iPad) ---------- */
+  @media (max-width: 900px) {
+    body { font-size: 16.5px; }
+    .hero h1 { font-size: 46px; }
+    .hero .lede { font-size: 20px; }
+    .steps h2, .pricing h2, .trust h2 { font-size: 30px; }
+    .price-grid { grid-template-columns: 1fr 1fr; gap: 16px; }
+  }
+
+  /* ---------- Responsive: phones ---------- */
+  @media (max-width: 600px) {
+    body { font-size: 16px; }
+    .header-inner img { height: 52px; }
+    .header-tag { display: none; }
+    .hero { padding: 36px 0 24px 0; }
+    .hero h1 { font-size: 34px; max-width: 100%; line-height: 1.16; }
+    .hero .lede { font-size: 18px; }
+    .steps h2, .pricing h2, .trust h2 { font-size: 26px; }
+    .panel { padding: 22px 18px; }
+    .price-grid { grid-template-columns: 1fr; }
+    .price-card.featured::before { position: static; display: inline-block; margin-bottom: 10px; }
+    .paywall { padding: 26px 20px; }
+    .paywall .price { font-size: 34px; }
+    .primary-action { flex-direction: column; align-items: stretch; }
+    .primary-action button { width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <img src="LOGO%20Rev01.png" alt="Before You Sign">
+    <div class="header-tag">Understand today. Decide with confidence.</div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section class="hero">
+    <h1>Know what's in your building contract before you sign it</h1>
+    <p class="lede">
+      Upload your contract. We'll scan it for clauses worth a closer look, for free —
+      then you can unlock a full, plain-English breakdown with the questions to take to your builder.
+    </p>
+    <p class="fine-print">General information only. Not legal advice.</p>
+
+    <div class="panel">
+      <div class="file-row">
+        <input type="file" id="contractFile" accept=".pdf,.docx">
+        <span class="file-hint">PDF or Word (.docx), up to 150MB</span>
+      </div>
+
+      <div class="ack-row">
+        <input type="checkbox" id="acknowledge">
+        <span>I understand this is general information only and I should seek professional advice before making decisions.</span>
+      </div>
+
+      <div class="primary-action">
+        <button id="scanButton">Scan My Contract — Free</button>
+        <p id="statusMessage"></p>
+      </div>
+
+      <div class="progress-track" id="progressTrack"><div class="progress-fill" id="progressFill"></div></div>
+
+      <div id="scanResults"></div>
+      <div id="fullResults"></div>
+    </div>
+  </section>
+
+  <section class="steps">
+    <h2>How it works</h2>
+    <ul class="step-list">
+      <li>
+        <span class="step-num">1</span>
+        <div class="step-body">
+          <strong>Upload your contract</strong>
+          <span>Select your building contract as a PDF or Word document — even large scanned copies.</span>
+        </div>
+      </li>
+      <li>
+        <span class="step-num">2</span>
+        <div class="step-body">
+          <strong>Get a free scan</strong>
+          <span>We check your document against clauses that commonly cause cost blowouts, delays, or reduced homeowner protections — no cost, no sign-up.</span>
+        </div>
+      </li>
+      <li>
+        <span class="step-num">3</span>
+        <div class="step-body">
+          <strong>Unlock the full review</strong>
+          <span>See a plain-English explanation for every flagged clause, plus the exact questions to ask your builder before you sign.</span>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <section class="pricing" id="pricing">
+    <h2>Pricing</h2>
+    <p class="sub">One payment. No subscription. Know what to ask before you sign.</p>
+
+    <div class="price-grid">
+      <div class="price-card">
+        <h3>Single Review</h3>
+        <div class="amount">$24.95</div>
+        <p>One residential building contract reviewed. Receive a plain-English summary and a personalised list of questions to ask your builder.</p>
+      </div>
+      <div class="price-card featured">
+        <h3>3 Review Pack</h3>
+        <div class="amount">$39.95</div>
+        <p>Up to three reviews for the same building project. Ideal for your original contract, builder revisions, and the final version — unused reviews stay available for later.</p>
+      </div>
+    </div>
+
+    <div class="price-addon">
+      <div><strong>Supporting Documents</strong><br><span>Specifications, inclusions, quotations, special conditions and more, reviewed alongside your contract for consistency.</span></div>
+      <strong>+$3.50 each</strong>
+    </div>
+
+    <p class="tagline">One payment. No subscription. Know what to ask before you sign.</p>
+  </section>
+
+  <section class="trust">
+    <h2>Why homeowners use this</h2>
+    <ul>
+      <li>Understand contract clauses in plain English, without legal jargon</li>
+      <li>Spot potential cost risks — variations, provisional sums, allowances — before signing</li>
+      <li>Know exactly which questions to ask your builder</li>
+      <li>Go into a major financial commitment with more confidence</li>
+    </ul>
+  </section>
+
+</div>
+
+<footer>
+  <div class="wrap">
+    <p>
+      Before You Sign uses automated document-review technology to generate general
+      guidance based on the contract you upload. It is not a licensed conveyancer,
+      lawyer, or building professional, and this is not legal advice. For a
+      clause-by-clause legal review, consult a qualified professional.
+    </p>
+  </div>
+</footer>
+
+<script type="module">
+  const MAX_UPLOAD_BYTES = 150 * 1024 * 1024;
+  let uploadedBlob = null; // { url, filename }
+  let uploadFn = null;
+
+  const FLAG_LABELS = {
+    variation: 'Variation & change-order pricing',
+    provisional: 'Provisional sums & allowances',
+    delay: 'Delay & liquidated damages',
+    termination: 'Termination rights',
+    substitution: 'Material substitution rights',
+    payment: 'Payment schedule & deposits',
+    defects: 'Defects & warranty period',
+  };
+
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.innerText = str == null ? '' : String(str);
+    return div.innerHTML;
+  }
+
+  function setProgress(pct) {
+    document.getElementById('progressFill').style.width = pct + '%';
+  }
+
+  function showProgress(show) {
+    document.getElementById('progressTrack').style.display = show ? 'block' : 'none';
+    if (!show) setProgress(0);
+  }
+
+  async function getUploadFn() {
+    if (uploadFn) return uploadFn;
+    const mod = await import('https://cdn.jsdelivr.net/npm/@vercel/blob@2.0.0/client/+esm');
+    uploadFn = mod.upload;
+    return uploadFn;
+  }
+
+  function validateFileAndAck() {
+    const fileInput = document.getElementById('contractFile');
+    const status = document.getElementById('statusMessage');
+    const acknowledge = document.getElementById('acknowledge');
+
+    if (!fileInput.files.length) {
+      status.innerText = 'Please choose a PDF or Word (.docx) document first.';
+      return null;
+    }
+    if (!acknowledge.checked) {
+      status.innerText = 'Please confirm you understand before continuing.';
+      return null;
+    }
+    const file = fileInput.files[0];
+    const ext = file.name.split('.').pop().toLowerCase();
+    if (ext !== 'pdf' && ext !== 'docx') {
+      status.innerText = 'Please upload a PDF or Word (.docx) file.';
+      return null;
+    }
+    if (file.size > MAX_UPLOAD_BYTES) {
+      status.innerText = 'That file is too large. Please upload a file under 150MB.';
+      return null;
+    }
+    status.innerText = '';
+    return file;
+  }
+
+  async function runFreeScan() {
+    const file = validateFileAndAck();
+    if (!file) return;
+
+    const status = document.getElementById('statusMessage');
+    const scanButton = document.getElementById('scanButton');
+    const scanResults = document.getElementById('scanResults');
+    const fullResults = document.getElementById('fullResults');
+
+    fullResults.style.display = 'none';
+    fullResults.innerHTML = '';
+    scanResults.style.display = 'none';
+    scanResults.innerHTML = '';
+    uploadedBlob = null;
+
+    scanButton.disabled = true;
+    status.innerText = 'Uploading your document...';
+    showProgress(true);
+    setProgress(10);
+
+    try {
+      const upload = await getUploadFn();
+      const blob = await upload(file.name, file, {
+        access: 'public',
+        handleUploadUrl: '/api/blob-upload',
+        onUploadProgress: ({ percentage }) => {
+          setProgress(10 + percentage * 0.5); // upload = first half of the bar
+        },
+      });
+
+      uploadedBlob = { url: blob.url, filename: file.name };
+
+      status.innerText = 'Reading your document...';
+      setProgress(65);
+
+      const response = await fetch('/api/scan', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ blobUrl: uploadedBlob.url, filename: uploadedBlob.filename }),
+      });
+      setProgress(95);
+      const data = await response.json();
+
+      if (!response.ok) {
+        status.innerText = response.status === 429
+          ? "You've hit the limit for now — please wait a minute and try again."
+          : (data.error || 'Something went wrong. Please try again.');
+        showProgress(false);
+        scanButton.disabled = false;
+        return;
+      }
+
+      setProgress(100);
+      status.innerText = '';
+      setTimeout(() => showProgress(false), 300);
+      renderScanResults(data.flagged || []);
+    } catch (err) {
+      console.error(err);
+      status.innerText = 'Something went wrong. Please try again.';
+      showProgress(false);
+    } finally {
+      scanButton.disabled = false;
+    }
+  }
+
+  function renderScanResults(flagged) {
+    const scanResults = document.getElementById('scanResults');
+    let html = '<div class="scan-heading">';
+
+    if (flagged.length > 0) {
+      html += `We found ${flagged.length} area${flagged.length > 1 ? 's' : ''} worth a closer look</div>`;
+      html += '<div class="scan-sub">A first pass through your document flagged the following. The full review explains what each one means for you and what to ask your builder.</div>';
+      for (const f of flagged) {
+        html += `
+          <div class="flag-row">
+            <span class="flag-mark"></span>
+            <span class="flag-label">${escapeHtml(f.label)}</span>
+            <span class="flag-lock">Locked</span>
+          </div>`;
+      }
+    } else {
+      html += 'No obvious flags on a first pass</div>';
+      html += '<div class="scan-sub">Nothing jumped out in a quick scan, but this pass only checks for common patterns — a full review reads the whole document more closely.</div>';
+    }
+
+    html += `
+      <div class="paywall">
+        <h3>Unlock the full review</h3>
+        <div class="price">$24.95<span> single review</span></div>
+        <ul>
+          <li>Plain-English explanation for every flagged clause</li>
+          <li>Specific questions to ask your builder before signing</li>
+          <li>A full read-through of your contract, not just a keyword pass</li>
+        </ul>
+        <button class="btn-amber btn-full" id="unlockButton">Unlock Full Review</button>
+        <div class="see-pricing">Reviewing more than one document? <a href="#pricing">See the 3 Review Pack</a>.</div>
+      </div>`;
+
+    scanResults.innerHTML = html;
+    scanResults.style.display = 'block';
+    document.getElementById('unlockButton').addEventListener('click', unlockFullReview);
+  }
+
+  async function unlockFullReview() {
+    // NOTE for the site owner: this currently runs the full review directly —
+    // there is no payment step wired in yet. When Stripe is connected, gate
+    // this call behind a successful checkout/payment confirmation instead.
+    if (!uploadedBlob) return;
+
+    const status = document.getElementById('statusMessage');
+    const unlockButton = document.getElementById('unlockButton');
+    const fullResults = document.getElementById('fullResults');
+
+    unlockButton.disabled = true;
+    unlockButton.innerText = 'Preparing your review...';
+    showProgress(true);
+    setProgress(15);
+
+    const messages = ['Reading your document...', 'Checking cost and variation clauses...', 'Preparing plain-English explanations...'];
+    let msgIndex = 0;
+    let progress = 15;
+    const timer = setInterval(() => {
+      if (progress < 85) {
+        progress += Math.random() * 5;
+        setProgress(Math.min(progress, 85));
+      }
+      if (Math.floor(progress / 25) > msgIndex && msgIndex < messages.length - 1) {
+        msgIndex += 1;
+        status.innerText = messages[msgIndex];
+      }
+    }, 1000);
+
+    try {
+      const response = await fetch('/api/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ blobUrl: uploadedBlob.url, filename: uploadedBlob.filename }),
+      });
+      clearInterval(timer);
+      setProgress(100);
+      const data = await response.json();
+
+      if (!response.ok) {
+        status.innerText = response.status === 429
+          ? "You've hit the limit for now — please wait a minute and try again."
+          : (data.error || 'Something went wrong. Please try again.');
+        showProgress(false);
+        unlockButton.disabled = false;
+        unlockButton.innerText = 'Unlock Full Review';
+        return;
+      }
+
+      status.innerText = '';
+      setTimeout(() => showProgress(false), 300);
+      renderFullResults(data);
+      fullResults.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } catch (err) {
+      clearInterval(timer);
+      console.error(err);
+      status.innerText = 'Something went wrong. Please try again.';
+      showProgress(false);
+      unlockButton.disabled = false;
+      unlockButton.innerText = 'Unlock Full Review';
+    }
+  }
+
+  const CATEGORY_META = {
+    keyRisks: { tag: 'Key risk', cls: '' },
+    costConcerns: { tag: 'Cost concern', cls: '' },
+    timeRisks: { tag: 'Time risk', cls: 'time' },
+    otherNotes: { tag: 'Note', cls: '' },
+  };
+
+  function renderFullResults(data) {
+    const fullResults = document.getElementById('fullResults');
+    let html = '<div class="result-block">';
+    html += '<h3>Your full review</h3>';
+    if (data.summary) {
+      html += `<div class="result-summary">${escapeHtml(data.summary)}</div>`;
+    }
+
+    let any = false;
+    for (const key of Object.keys(CATEGORY_META)) {
+      const items = Array.isArray(data[key]) ? data[key] : [];
+      if (!items.length) continue;
+      any = true;
+      const meta = CATEGORY_META[key];
+      for (const item of items) {
+        html += `
+          <div class="item">
+            <div class="item-tag ${meta.cls}">${meta.tag}</div>
+            <div class="item-title">${escapeHtml(item.title || '')}</div>
+            <div class="item-desc">${escapeHtml(item.description || '')}</div>
+            ${item.question ? `<div class="item-q">Ask your builder: ${escapeHtml(item.question)}</div>` : ''}
+          </div>`;
+      }
+    }
+
+    if (!any) {
+      html += '<p>No major concerns stood out in this document — but this tool can still miss things. A professional review is always worthwhile for a major contract.</p>';
+    }
+
+    html += '</div>';
+    fullResults.innerHTML = html;
+    fullResults.style.display = 'block';
+  }
+
+  document.getElementById('scanButton').addEventListener('click', runFreeScan);
+</script>
+
+</body>
+</html>
