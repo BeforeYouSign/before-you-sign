@@ -13,6 +13,7 @@ since it protects the business as much as the visitor.
 
 ## How large files are handled
 
+
 Two platform limits matter here:
 
 - Vercel's serverless functions have a hard ~4.5MB limit on data sent directly in a
